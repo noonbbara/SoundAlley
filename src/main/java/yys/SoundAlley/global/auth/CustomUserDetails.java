@@ -48,4 +48,8 @@ public class CustomUserDetails implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
+    public Member getMember() {
+        return member;
+    }
 }

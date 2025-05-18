@@ -20,6 +20,7 @@ import yys.SoundAlley.global.auth.filter.JwtFilter;
 import yys.SoundAlley.global.auth.handler.CustomAccessDeniedHandler;
 import yys.SoundAlley.global.auth.handler.CustomEntryPoint;
 import yys.SoundAlley.global.auth.util.JwtUtil;
+import yys.SoundAlley.member.repository.MemberRepository;
 
 @Configuration
 @RequiredArgsConstructor
@@ -30,6 +31,7 @@ public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomEntryPoint customEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final MemberRepository memberRepository;
 
     private String[] allowUrl = {
             "/auth/sign-up",

@@ -19,6 +19,8 @@ import yys.SoundAlley.global.apiPayload.exception.GeneralException;
 import yys.SoundAlley.global.auth.exception.AuthErrorCode;
 import yys.SoundAlley.global.auth.exception.AuthException;
 import yys.SoundAlley.global.auth.util.JwtUtil;
+import yys.SoundAlley.member.entity.Member;
+import yys.SoundAlley.member.repository.MemberRepository;
 
 import java.io.IOException;
 
