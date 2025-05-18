@@ -2,6 +2,7 @@ package yys.SoundAlley.member.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import yys.SoundAlley.member.exception.MemberErrorCode;
 import yys.SoundAlley.member.exception.MemberException;
 import yys.SoundAlley.member.repository.MemberRepository;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OAuth2ServiceImpl implements OAuth2Service {
@@ -74,6 +76,10 @@ public class OAuth2ServiceImpl implements OAuth2Service {
                     .retrieve()
                     .bodyToMono(OAuth2DTO.OAuth2TokenDTO.class)
                     .block();
+//            log.info("카카오 액세스 토큰: {}", tokenDTO.getAccess_token());
+//            log.info("카카오 리프레시 토큰: {}", tokenDTO.getRefresh_token());
+//            log.info("토큰 타입: {}", tokenDTO.getToken_type());
+//            log.info("만료 시간: {}", tokenDTO.getExpires_in());
         } catch (Exception e) {
             throw new MemberException(MemberErrorCode.OAUTH_TOKEN_FAIL);
         }
@@ -81,6 +87,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
 
     // 🔹 2. 액세스 토큰 → 사용자 정보
     private OAuth2DTO.KakaoProfile requestUserInfo(String accessToken) {
+        //log.info("카카오 액세스 토큰: {}", accessToken);
         try {
             return webClient.get()
                     .uri(userInfoURI)
@@ -99,6 +106,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         return memberRepository.findById(id)
                 .orElseGet(() -> memberRepository.save(
                         Member.builder()
+                                .id(id) // 카카오 고유 ID를 직접 PK로 사용
                                 .username(username)
                                 .build()
                 ));
@@ -106,6 +114,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
 
     // 🔹 4. JWT 생성 후 DTO로 반환
     private MemberResponseDTO.MemberTokenDTO createTokenDTO(Member member) {
+        log.info("카카오 액세스 토큰: {}", jwtUtil.createAccessToken(member));
         return MemberResponseDTO.MemberTokenDTO.builder()
                 .accessToken(jwtUtil.createAccessToken(member))
                 .refreshToken(jwtUtil.createRefreshToken(member))

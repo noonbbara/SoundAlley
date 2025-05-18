@@ -22,11 +22,19 @@ public class PostCommandServiceImpl implements PostCommandService {
     private final MemberRepository memberRepository;
 
     @Override
-    public Post createPost(PostRequestDTO.CreatePostRequestDTO dto) {
-        Member member = memberRepository.findById(dto.getMemberId())
+    public Post createPost(PostRequestDTO.CreatePostRequestDTO dto, Long memberId) {
+        // member 조회
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new GeneralException(MemberErrorCode.NOT_FOUND));
 
-        Post post = dto.toEntity(member);
+        Post post = Post.builder()
+                .title(dto.getTitle())
+                .description(dto.getDescription())
+                .place(dto.getPlace())
+                .date(dto.getDate())
+                .member(member)
+                .build();
+
         return postRepository.save(post);
     }
 

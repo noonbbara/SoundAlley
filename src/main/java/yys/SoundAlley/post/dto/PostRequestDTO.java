@@ -15,15 +15,15 @@ public class PostRequestDTO {
         private String description;
         private String place;
         private String date;
-        private Long memberId;
+        //private Long memberId;
 
-        public Post toEntity(Member member) {
+        public Post toEntity() {
             return Post.builder()
                     .title(this.title)
                     .description(this.description)
                     .place(this.place)
                     .date(this.date)
-                    .member(member)
+                    //.member(member)
                     .build();
         }
     }

@@ -39,7 +39,8 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/swagger-resources/**",
             "/v3/api-docs/**",
-            "/oauth2/callback/kakao"
+            "/oauth2/callback/kakao",
+            "/api/auth/kakao"
     };
 
     @Bean
@@ -47,7 +48,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(allowUrl).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/posts").permitAll() // 게시글 조회는 로그인 안해도됨
+                        .requestMatchers(HttpMethod.GET, "/api/posts").permitAll() // 게시글 조회는 로그인 안해도됨
                         .anyRequest().authenticated()
                 )
                 .cors(cors -> cors.configurationSource(CorsConfig.apiConfigurationSource()))

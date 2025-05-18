@@ -20,7 +20,7 @@ import java.util.List;
 import static yys.SoundAlley.global.apiPayload.code.GeneralSuccessCode.NO_CONTENT;
 
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("/api/posts")
 @RequiredArgsConstructor
 public class PostController {
 
@@ -30,8 +30,16 @@ public class PostController {
 
     @PostMapping
     @Operation(summary = "게시글 생성 API", description = "게시글 생성하는 API")
-    public CustomResponse<PostResponseDTO.CreatePostResponseDTO> createPost(@RequestBody PostRequestDTO.CreatePostRequestDTO dto) {
-        Post post = postCommandService.createPost(dto);
+    public CustomResponse<PostResponseDTO.CreatePostResponseDTO> createPost(
+            @RequestBody PostRequestDTO.CreatePostRequestDTO dto,
+            @AuthenticationPrincipal CustomUserDetails userDetails  // JWT에서 추출한 로그인 유저 정보
+    ) {
+        // userDetails로부터 로그인한 회원 ID 가져오기
+        Long memberId = userDetails.getId();
+
+        // memberId를 dto에 넘겨주거나, 서비스 레이어에 같이 넘김
+        Post post = postCommandService.createPost(dto, memberId);
+
         return CustomResponse.created(PostResponseDTO.CreatePostResponseDTO.from(post));
     }
 
