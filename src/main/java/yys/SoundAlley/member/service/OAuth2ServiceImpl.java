@@ -118,6 +118,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         return MemberResponseDTO.MemberTokenDTO.builder()
                 .accessToken(jwtUtil.createAccessToken(member))
                 .refreshToken(jwtUtil.createRefreshToken(member))
+                .userId(member.getId())
                 .build();
     }
 }

@@ -9,6 +9,8 @@ import yys.SoundAlley.global.apiPayload.CustomResponse;
 import yys.SoundAlley.global.apiPayload.code.GeneralSuccessCode;
 import yys.SoundAlley.global.auth.CustomUserDetails;
 import yys.SoundAlley.member.entity.Member;
+import yys.SoundAlley.member.exception.MemberErrorCode;
+import yys.SoundAlley.member.repository.MemberRepository;
 import yys.SoundAlley.post.dto.PostRequestDTO;
 import yys.SoundAlley.post.dto.PostResponseDTO;
 import yys.SoundAlley.post.entity.Post;
@@ -26,6 +28,7 @@ public class PostController {
 
     private final PostCommandService postCommandService;
     private final PostQueryService postQueryService;
+    private final MemberRepository memberRepository;
 
 
     @PostMapping
@@ -53,7 +56,9 @@ public class PostController {
 
     @GetMapping("/mine")
     public CustomResponse<List<PostResponseDTO.GetPostResponseDTO>> getMyPosts(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        Member member = userDetails.getMember();
+
+        Member member = memberRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new RuntimeException(MemberErrorCode.NOT_FOUND.getMessage()));
         List<PostResponseDTO.GetPostResponseDTO> posts = postQueryService.getPostsByMember(member);
         return CustomResponse.ok(posts);
     }
@@ -63,7 +68,8 @@ public class PostController {
             @PathVariable Long postId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        Member member = userDetails.getMember();
+        Member member = memberRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new RuntimeException(MemberErrorCode.NOT_FOUND.getMessage()));
         postCommandService.deletePost(postId, member);
         return CustomResponse.ok(null);
     }

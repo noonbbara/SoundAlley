@@ -32,5 +32,5 @@ public class MemberResponseDTO {
     }
 
     @Builder
-    public record MemberTokenDTO(String accessToken, String refreshToken) {}
+    public record MemberTokenDTO(String accessToken, String refreshToken, Long userId) {}
 }

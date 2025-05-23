@@ -48,6 +48,7 @@ public class PostResponseDTO {
         private LocalDateTime createdAt;
         private String place;
         private String date;
+        private Long writerId;
         private String writerName;
 
         public static GetPostResponseDTO from(Post post) {
@@ -58,6 +59,7 @@ public class PostResponseDTO {
                     .place(post.getPlace())
                     .date(post.getDate())
                     .createdAt(post.getCreatedAt())
+                    .writerId(post.getMember().getId())
                     .writerName(post.getMember().getUsername())
                     .build();
         }
