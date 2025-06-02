@@ -19,6 +19,7 @@ public class CorsConfig {
         allowedOriginPatterns.add("http://localhost:5173");
         allowedOriginPatterns.add("https://soundalley.vercel.app");
         allowedOriginPatterns.add("https://soundalley.duckdns.org");
+        allowedOriginPatterns.add("https://sound-alley.duckdns.org");
 
         ArrayList<String> allowedHttpMethods = new ArrayList<>();
         allowedHttpMethods.add("GET");
